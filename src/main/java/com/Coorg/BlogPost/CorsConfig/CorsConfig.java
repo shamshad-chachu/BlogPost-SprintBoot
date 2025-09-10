@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                     "http://localhost:5173",  // For local development
-                    "https://your-vercel-domain.vercel.app" // Your Vercel domain here
+                    "https://blog-post-react-pi.vercel.app"// Your Vercel domain here
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
