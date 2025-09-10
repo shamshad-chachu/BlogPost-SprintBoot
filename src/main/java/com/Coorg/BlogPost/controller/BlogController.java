@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.Coorg.BlogPost.dto.BlogDto;
 //import com.Coorg.BlogPost.dto.BlogDto;
 import com.Coorg.BlogPost.model.Blog;
 import com.Coorg.BlogPost.model.User;
@@ -40,10 +41,10 @@ public class BlogController {
     private AuthService authService;
 
     @GetMapping
-    public ResponseEntity<?> getAllBlogs(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public  Page<BlogDto> getAllBlogs(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         
-    	Blog data = (Blog) blogService.getAllBlogs(page, size);
-    	return ResponseEntity.ok(data);
+//    	Blog data = (Blog) blogService.getAllBlogs(page, size);
+    	return blogService.getAllBlogs(page, size) ;
     }
 
     @GetMapping("/{id}/{email}")
@@ -96,7 +97,7 @@ public class BlogController {
             return ResponseEntity.status(401).body(Collections.singletonMap("error", "Unauthorized."));
         }
         try {
-            Blog updatedBlog = blogService.updateBlog(BlogId, blog, userId);
+            BlogDto updatedBlog = blogService.updateBlog(BlogId, blog, userId);
 //            BlogDto updated = new BlogDto(updatedBlog);
             
 //            System.out.println(updated);

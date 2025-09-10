@@ -28,7 +28,7 @@ public class BlogService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<Blog> getAllBlogs(int page, int size) {
+    public Page<BlogDto> getAllBlogs(int page, int size) {
 //        return blogRepository.findAll(PageRequest.of(page, size));
     	
     	
@@ -36,12 +36,12 @@ public class BlogService {
     	    
     	    // Map the Page of Blog entities to a Page of BlogDto objects
     	    return blogs.map(blog -> {
-    	        Blog dto = new Blog();
+    	        BlogDto dto = new BlogDto();
     	        dto.setId(blog.getId());
     	        dto.setTitle(blog.getTitle());
     	        dto.setContent(blog.getContent());
     	        dto.setCreatedAt(blog.getCreatedAt());
-    	        dto.setAuthor(blog.getAuthor()); // This will now trigger the lazy load
+    	        dto.setAuthorName(blog.getAuthor().getName()); // This will now trigger the lazy load
     	        return dto;
     	    });
     	
@@ -68,7 +68,7 @@ public class BlogService {
     }
     
     		//update blog
-    public Blog updateBlog(Long id, Blog blogUpdates, Long currentUserId) {
+    public BlogDto updateBlog(Long id, Blog blogUpdates, Long currentUserId) {
         Blog blog = blogRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Blog not found"));
         if (!(blog.getAuthor().getId() == currentUserId)){
@@ -78,7 +78,16 @@ public class BlogService {
         Optional<User> author = userRepository.findById(currentUserId);
         blog.setTitle(blogUpdates.getTitle());
         blog.setContent(blogUpdates.getContent());
-        Blog blogdto = blogRepository.save(blog);
+        Blog data = blogRepository.save(blog);
+        
+        //converting to BolgDto
+        BlogDto blogdto = new BlogDto();
+        blogdto.setId(data.getId());
+        blogdto.setTitle(data.getTitle());
+        blogdto.setContent(data.getContent());
+        blogdto.setAuthorName(data.getAuthor().getName());
+        blogdto.setCreatedAt(data.getCreatedAt());
+        
       
         return blogdto;
     }

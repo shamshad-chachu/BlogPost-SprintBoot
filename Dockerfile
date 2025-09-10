@@ -20,6 +20,6 @@ RUN ./mvnw package -DskipTests
 # Stage 2: Create the final production image
 FROM openjdk:17-slim
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/BlogPost-0.0.1-SNAPSHOT.jar BlogPost-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "BlogPost-0.0.1-SNAPSHOT.jar"]
