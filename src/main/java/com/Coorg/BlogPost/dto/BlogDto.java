@@ -5,16 +5,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+//import com.Coorg.BlogPost.model.Blog;
 
 import java.util.Date;
 
-import com.Coorg.BlogPost.model.Blog;
 
-@Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class BlogDto {
     private Long id;
     private String title;
@@ -31,14 +27,6 @@ public class BlogDto {
 	public BlogDto() {
 		super();
 	}
-	public BlogDto(Blog updatedBlog) {
-		super();
-		this.id = updatedBlog.getId();
-		this.title = updatedBlog.getTitle();
-		this.content = updatedBlog.getContent();
-		this.authorName = updatedBlog.getAuthor().getName();
-		this.createdAt = updatedBlog.getCreatedAt();
-	}
 	public BlogDto(Long id, String title, String content, String authorName, Date createdAt) {
 		super();
 		this.id = id;
@@ -47,6 +35,14 @@ public class BlogDto {
 		this.authorName = authorName;
 		this.createdAt = createdAt;
 	}
+//	public BlogDto(Blog updatedBlog) {
+//		super();
+//		this.id = updatedBlog.getId();
+//		this.title = updatedBlog.getTitle();
+//		this.content = updatedBlog.getContent();
+//		this.authorName = updatedBlog.getAuthor().getName();
+//		this.createdAt = updatedBlog.getCreatedAt();
+//	}
 	public Long getId() {
 		return id;
 	}

@@ -1,11 +1,11 @@
 package com.Coorg.BlogPost.controller;
 
 
-import com.Coorg.BlogPost.dto.BlogDto;
-import com.Coorg.BlogPost.model.Blog;
-import com.Coorg.BlogPost.model.User;
-import com.Coorg.BlogPost.service.AuthService;
-import com.Coorg.BlogPost.service.BlogService;
+//import com.Coorg.BlogPost.service.AuthService;
+//import com.Coorg.BlogPost.service.BlogService;
+//import com.Coorg.BlogPost.model.User;
+//import com.Coorg.BlogPost.model.Blog;
+//import com.Coorg.BlogPost.dto.BlogDto;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -15,6 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+//import com.Coorg.BlogPost.dto.BlogDto;
+import com.Coorg.BlogPost.model.Blog;
+import com.Coorg.BlogPost.model.User;
+import com.Coorg.BlogPost.service.AuthService;
+import com.Coorg.BlogPost.service.BlogService;
+//import com.Coorg.BlogPost.dto.BlogDto;
+
 //import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,8 +40,10 @@ public class BlogController {
     private AuthService authService;
 
     @GetMapping
-    public Page<BlogDto> getAllBlogs(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return blogService.getAllBlogs(page, size);
+    public ResponseEntity<?> getAllBlogs(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        
+    	Blog data = (Blog) blogService.getAllBlogs(page, size);
+    	return ResponseEntity.ok(data);
     }
 
     @GetMapping("/{id}/{email}")
@@ -87,11 +97,11 @@ public class BlogController {
         }
         try {
             Blog updatedBlog = blogService.updateBlog(BlogId, blog, userId);
-            BlogDto updated = new BlogDto(updatedBlog);
+//            BlogDto updated = new BlogDto(updatedBlog);
             
 //            System.out.println(updated);
 //            return null;
-            return ResponseEntity.ok(updated);
+            return ResponseEntity.ok(updatedBlog);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
         }

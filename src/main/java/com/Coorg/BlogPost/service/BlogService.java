@@ -1,16 +1,22 @@
 package com.Coorg.BlogPost.service;
 
 
-import com.Coorg.BlogPost.dto.BlogDto;
-import com.Coorg.BlogPost.model.Blog;
-import com.Coorg.BlogPost.model.User;
-import com.Coorg.BlogPost.repository.BlogRepository;
-import com.Coorg.BlogPost.repository.UserRepository;
+//import com.Coorg.BlogPost.model.Blog;
+//import com.Coorg.BlogPost.model.User;
+//import com.Coorg.BlogPost.repository.BlogRepository;
+//import com.Coorg.BlogPost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.Coorg.BlogPost.dto.BlogDto;
+import com.Coorg.BlogPost.model.Blog;
+import com.Coorg.BlogPost.model.User;
+import com.Coorg.BlogPost.repository.BlogRepository;
+import com.Coorg.BlogPost.repository.UserRepository;
+
+//import com.Coorg.BlogPost.dto.BlogDto;
 import java.util.Optional;
 
 @Service
@@ -22,7 +28,7 @@ public class BlogService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<BlogDto> getAllBlogs(int page, int size) {
+    public Page<Blog> getAllBlogs(int page, int size) {
 //        return blogRepository.findAll(PageRequest.of(page, size));
     	
     	
@@ -30,12 +36,12 @@ public class BlogService {
     	    
     	    // Map the Page of Blog entities to a Page of BlogDto objects
     	    return blogs.map(blog -> {
-    	        BlogDto dto = new BlogDto();
+    	        Blog dto = new Blog();
     	        dto.setId(blog.getId());
     	        dto.setTitle(blog.getTitle());
     	        dto.setContent(blog.getContent());
     	        dto.setCreatedAt(blog.getCreatedAt());
-    	        dto.setAuthorName(blog.getAuthor().getName()); // This will now trigger the lazy load
+    	        dto.setAuthor(blog.getAuthor()); // This will now trigger the lazy load
     	        return dto;
     	    });
     	
@@ -72,7 +78,9 @@ public class BlogService {
         Optional<User> author = userRepository.findById(currentUserId);
         blog.setTitle(blogUpdates.getTitle());
         blog.setContent(blogUpdates.getContent());
-        return blogRepository.save(blog);
+        Blog blogdto = blogRepository.save(blog);
+      
+        return blogdto;
     }
     
     	// delete blog
