@@ -9,6 +9,8 @@ package com.Coorg.BlogPost.controller;
 
 import jakarta.servlet.http.HttpSession;
 
+import org.slf4j.LoggerFactory;
+
 //import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +51,29 @@ public class BlogController {
 
     @GetMapping("/{id}/{email}")
     public ResponseEntity<?> getBlogById(@PathVariable Long id,@PathVariable String email, HttpSession session) {
-    	
+    	if(email.equals("default")) {
+    		Long currentUserId = null;
+    		
+    		return  blogService.getBlogById(id)
+                    .map(blog -> {
+                    	System.out.println(blog);
+                        Map<String, Object> response = new HashMap<>();
+                        response.put("id", blog.getId());
+                        response.put("title", blog.getTitle());
+                        response.put("content", blog.getContent());
+                        response.put("createdAt", blog.getCreatedAt());
+                        response.put("author", Map.of("name", blog.getAuthor().getName(),"UserId",blog.getAuthor().getId()));
+              
+
+                        boolean isAuthor = (currentUserId != null) && (currentUserId.equals(blog.getAuthor().getId()));
+                        response.put("isAuthor", isAuthor);
+//                        System.out.println(response);
+                        return ResponseEntity.ok(response);
+                    })
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+    	}
     	User user = authService.getUser(email).get();
-    	 Long currentUserId = user.getId();
+    	   Long currentUserId = user.getId();
 //        Long currentUserId = (Long) session.getAttribute("userId");
 
         return blogService.getBlogById(id)
@@ -71,7 +93,12 @@ public class BlogController {
                     return ResponseEntity.ok(response);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    	
     }
+    
+    
+    
+    
 
     @PostMapping
     public ResponseEntity<?> createBlog(@RequestBody Blog blog, HttpSession session) {
